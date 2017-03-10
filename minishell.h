@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/10 13:04:02 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/10 15:37:43 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define MINISHELL_H
 
 # include "libdict/libdict.h"
+# include "libvll/libvll.h"
+
+# include <unistd.h>
 
 // TODO remove debug includes
 # include <stdio.h>
