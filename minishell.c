@@ -6,33 +6,58 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/10 15:03:33 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/15 13:33:22 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define SPLIT(v) vll_split(v, " ", 1, VLL_SPLIT_STR)
+int bi_env (t_dict *env) {dict_print(env, "=", "\n"); return (0);}
+
+static int
+	query_bi
+	(t_dict *env
+	, t_lst *inp
+	, int *ret)
+{
+	static char	names[][10] = {"env"};
+	static int	(*f[]) (t_dict *) =  {&bi_env};
+	size_t		i;	
+
+	i = 0;
+	while (i < sizeof(names) / sizeof(*names))
+	{
+		if (ft_strcmp(names[i], inp->data) == 0)
+		{
+			*ret = f[i](env);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 static int
 	loop
 	(t_dict *env
 	, t_vect *buf)
 { 
-	t_vll	*spl;
+	t_lst	*inp;
+	int		ret;
 
 	buf->used = 0;
 	vect_req(buf, 64);
-	while (read(0, buf->data, 1) == 1)
+	while (read(0, buf->data + buf->used, 1) == 1)
 	{
-		buf->used++;
+		if (((char *)buf->data)[buf->used] == '\n')
+			break ;
 		vect_req(buf, 1);
+		buf->used++;
 	}
 	if (buf->used == 0)
 		return (0);
-	spl = SPLIT(buf);
-	printf("%lu\n", spl->size);
-	vll_print(0, spl, 0);
+	inp = lst_split(buf->data, buf->used, " \t", 2);
+	query_bi(env, inp, &ret);
 	return (loop(env, buf));
 }
 

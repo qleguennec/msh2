@@ -20,7 +20,7 @@ cd $TESTDIR
 function test_env()
 {
 	$ENV | grep -v '^_=' | sort > $A
-	$MSH | grep -v '^_=' | sort > $B
+	echo env | $MSH | grep -v '^_=' | sort > $B
 	if cmp -s $A $B; then
 		echo "basic test ok"
 	else
