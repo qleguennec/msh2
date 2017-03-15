@@ -1,12 +1,12 @@
 NAME = minishell
 SRC = $(filter %.c, $(shell ls))
 OBJ = $(SRC:.c=.o)
-LIB = libft/libft.a libvect/libvect.a libdict/libdict.a liblst/liblst.a
+LIB = libft/libft.a libvect/libvect.a libdict/libdict.a libfmt/libfmt.a liblst/liblst.a
 
 INCS +=
 CFLAGS += -g -Wall -Wextra -Werror $(INCS)
-LDLIBS += -llst -ldict -lvect -lft
-LOADLIBES += -Llibft -Llibvect -Llibdict -Lliblst
+LDLIBS += -llst -ldict -lfmt -lvect -lft
+LOADLIBES += -Llibft -Llibvect -Llibdict -Lliblst -Llibfmt
 LDFLAGS += -g
 
 all: $(LIB) $(NAME)

@@ -6,13 +6,11 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/15 13:33:22 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/15 14:31:55 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int bi_env (t_dict *env) {dict_print(env, "=", "\n"); return (0);}
 
 static int
 	query_bi
@@ -21,15 +19,15 @@ static int
 	, int *ret)
 {
 	static char	names[][10] = {"env"};
-	static int	(*f[]) (t_dict *) =  {&bi_env};
-	size_t		i;	
+	static int	(*f[]) (t_dict *, t_lst *, int *) = {&bi_env};
+	size_t		i;
 
 	i = 0;
 	while (i < sizeof(names) / sizeof(*names))
 	{
 		if (ft_strcmp(names[i], inp->data) == 0)
 		{
-			*ret = f[i](env);
+			*ret = f[i](env, inp->next, ret);
 			return (1);
 		}
 		i++;
@@ -41,10 +39,11 @@ static int
 	loop
 	(t_dict *env
 	, t_vect *buf)
-{ 
+{
 	t_lst	*inp;
 	int		ret;
 
+	write(1, "> ", 2);
 	buf->used = 0;
 	vect_req(buf, 64);
 	while (read(0, buf->data + buf->used, 1) == 1)
