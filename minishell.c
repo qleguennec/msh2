@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/17 13:49:02 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/17 16:13:20 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,8 @@ static int
 		return (ret);
 	if ((s = query_path_env(env, inp->data)))
 	{
-		path.data = s;
-		path.used = ft_strlen(s);
-		path.total = path.used + 1;
-		vect_mset_end(&path, '/', 1);
-		vect_add(&path, inp->data, ft_strlen(inp->data));
-		vect_mset_end(&path, '\0', 1);
+		vect_init(&path);
+		VFMT(&path, "%s/%s\0", s, inp->data);
 		ret = fork_exec(env, path.data, inp);
 		free(path.data);
 		return (ret);
@@ -73,14 +69,8 @@ static int
 		return (ERR(
 		"minishell: pwd: can't determine current directory: Permission denied"
 		, -1, 0));
+	dict_set(env, "PWD", cwd, 1 + ft_strlen(cwd));
 	pwd_ent = dict_lookup(env, "PWD");
-	if (pwd_ent == NULL)
-		dict_str_add(env, "PWD", cwd);
-	else
-	{
-		pwd_ent->val.used = 0;
-		vect_add(&pwd_ent->val, cwd, ft_strlen(cwd));
-	}
 	return (0);
 }
 
