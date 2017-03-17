@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/16 15:20:47 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/17 13:49:02 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,17 @@ static int
 	, t_lst *inp
 	, int *ret)
 {
-	static char	names[][10] = {"env"};
-	static int	(*f[]) (t_dict *, t_lst *, int *) = {&bi_env};
+	static char	names[][10] =
+		{"env", "exit", "cd"};
+	static int	(*f[]) (t_dict *, t_lst *, int *) =
+		{&bi_env, &bi_exit, &bi_cd};
 	size_t		i;
 
 	i = 0;
 	while (i < sizeof(names) / sizeof(*names))
 	{
 		if (ft_strcmp(names[i], inp->data) == 0)
-		{
-			*ret = f[i](env, inp->next, ret);
-			return (1);
-		}
+			return (f[i](env, inp->next, ret));
 		i++;
 	}
 	return (0);
@@ -44,6 +43,8 @@ static int
 	int		ret;
 	t_vect	path;
 
+	if (inp == NULL)
+		return (0);
 	if (query_bi(env, inp, &ret))
 		return (ret);
 	if ((s = query_path_env(env, inp->data)))
@@ -56,7 +57,30 @@ static int
 		vect_mset_end(&path, '\0', 1);
 		ret = fork_exec(env, path.data, inp);
 		free(path.data);
-	}	
+		return (ret);
+	}
+	return (ERR("minishell: %s: not found", 0, inp->data));
+}
+
+static int
+	pre_loop
+	(t_dict *env)
+{
+	char		cwd[1024];
+	t_dict_ent	*pwd_ent;
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		return (ERR(
+		"minishell: pwd: can't determine current directory: Permission denied"
+		, -1, 0));
+	pwd_ent = dict_lookup(env, "PWD");
+	if (pwd_ent == NULL)
+		dict_str_add(env, "PWD", cwd);
+	else
+	{
+		pwd_ent->val.used = 0;
+		vect_add(&pwd_ent->val, cwd, ft_strlen(cwd));
+	}
 	return (0);
 }
 
@@ -68,23 +92,13 @@ static int
 	t_lst	*inp;
 	char	c;
 
-	write(1, "> ", 2);
+	pre_loop(env);
+	write(1, "$> ", 3);
 	buf->used = 0;
-	vect_req(buf, 64);
-	while (read(0, &c, 1) == 1)
-	{
+	while (read(0, &c, 1) == 1 && c != '\n')
 		vect_mset_end(buf, c, 1);
-		if (((char *)buf->data)[buf->used - 1] == '\n')
-		{
-			printf("asd\n");
-			break ;
-		}	
-	}
 	if (buf->used == 0)
-	{
-		free(buf->data);
-		return (0);
-	}
+		return (c == '\n' ? loop(env, buf) : 0);
 	inp = lst_split(buf->data, buf->used, " \t", 2);
 	query(env, inp);
 	lst_free(inp);
@@ -97,7 +111,6 @@ int
 	, char **argv
 	, char **env_def)
 {
-	int		ret;
 	t_dict	env;
 	t_vect	buf;
 
@@ -108,7 +121,5 @@ int
 		dict_str_import(&env, *env_def++, "="
 			, DICT_IMPORT_ADD | DICT_IMPORT_STR);
 	vect_init(&buf);
-	ret = loop(&env, &buf);
-	dict_free(&env);
-	return (ret);
+	return (loop(&env, &buf));
 }

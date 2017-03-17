@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 11:35:38 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/16 15:04:32 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/17 11:21:31 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,15 @@ char
 	lst = lst_split(path, ft_strlen(path), ":", 1);
 	while (lst)
 	{
-		if ((dir = opendir(lst->data)) != NULL && path_match(dir, file))
+		if ((dir = opendir(lst->data)) != NULL)
 		{
-			ret = ft_strdup(lst->data);
-			lst_free(lst);
-			return (ret);
+			if (path_match(dir, file))
+			{
+				ret = ft_strdup(lst->data);
+				lst_free(lst);
+				return (ret);
+			}
+			closedir(dir);
 		}
 		free(lst->data);
 		next = lst->next;

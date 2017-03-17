@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/16 13:49:40 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/17 11:50:36 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,15 @@ int
 	(t_dict *env
 	, char *path
 	, t_lst *args);
+int
+	bi_exit
+	(t_dict *env
+	, t_lst *inp
+	, int *ret);
+int
+	bi_cd
+	(t_dict *env
+	, t_lst *inp
+	, int *ret);
 
 #endif
