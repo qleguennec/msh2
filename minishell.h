@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/17 11:50:36 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/18 13:04:33 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <sys/dir.h>
 
 // TODO remove debug includes

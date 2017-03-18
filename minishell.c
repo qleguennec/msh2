@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/17 16:13:20 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/18 13:01:46 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,12 @@ static int
 	(t_dict *env)
 {
 	char		cwd[1024];
-	t_dict_ent	*pwd_ent;
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (ERR(
 		"minishell: pwd: can't determine current directory: Permission denied"
 		, -1, 0));
 	dict_set(env, "PWD", cwd, 1 + ft_strlen(cwd));
-	pwd_ent = dict_lookup(env, "PWD");
 	return (0);
 }
 

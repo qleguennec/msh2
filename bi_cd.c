@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/17 16:17:38 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/18 13:04:09 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int
 {
 	t_dict_ent	*ent;
 
-	printf("CD_GET_ENT %s\n", key);
 	ent = dict_lookup(env, key);
 	if (ent == NULL)
 		return (ERR("minishell: cd: %s not set", 0, key));
@@ -49,7 +48,6 @@ static char
 	else if (*(char *)inp->data != '/')
 	{
 		ret = cd_get_ent(env, &path, "PWD");
-		printf("%s\n", inp->data);
 		VFMT(&path, "/%s", inp->data);
 	}
 	else
