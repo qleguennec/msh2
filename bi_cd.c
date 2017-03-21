@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/18 13:04:09 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/21 16:12:24 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,27 @@ static char
 	(t_dict *env
 	, t_lst *inp)
 {
-	int		ret;
 	t_vect	path;
 
 	vect_init(&path);
-	ret = 1;
 	if (inp == NULL || *(char *)inp->data == '~')
 	{
-		ret = cd_get_ent(env, &path, "HOME");
+		cd_get_ent(env, &path, "HOME");
 		if (inp != NULL)
 			VFMT(&path, "%s", inp->data + 1);
 	}
 	else if (*(char *)inp->data == '-')
-		ret = cd_get_ent(env, &path, "OLDPWD");
+		cd_get_ent(env, &path, "OLDPWD");
 	else if (*(char *)inp->data != '/')
 	{
-		ret = cd_get_ent(env, &path, "PWD");
+		cd_get_ent(env, &path, "PWD");
 		VFMT(&path, "/%s", inp->data);
+		printf("%s\n", path.data);
 	}
 	else
 		VFMT(&path, "%s", inp->data);
 	vect_mset_end(&path, '\0', 1);
-	if (ret == 0)
-		free(path.data);
-	return (ret ? path.data : NULL);
+	return (path.data);
 }
 
 int

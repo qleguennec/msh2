@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/18 13:01:46 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/21 16:05:17 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ static int
 	while (i < sizeof(names) / sizeof(*names))
 	{
 		if (ft_strcmp(names[i], inp->data) == 0)
-			return (f[i](env, inp->next, ret));
+		{
+			*ret = f[i](env, inp->next, ret);
+			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -45,9 +48,11 @@ static int
 
 	if (inp == NULL)
 		return (0);
-	if (query_bi(env, inp, &ret))
+	if (*(char *)inp->data == '/')
+		return (fork_exec(env, inp->data, inp));
+	else if (query_bi(env, inp, &ret))
 		return (ret);
-	if ((s = query_path_env(env, inp->data)))
+	else if ((s = query_path_env(env, inp->data)))
 	{
 		vect_init(&path);
 		VFMT(&path, "%s/%s\0", s, inp->data);
@@ -66,7 +71,7 @@ static int
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (ERR(
-		"minishell: pwd: can't determine current directory: Permission denied"
+		"minishell: pwd: can't determine current directory: permission denied"
 		, -1, 0));
 	dict_set(env, "PWD", cwd, 1 + ft_strlen(cwd));
 	return (0);

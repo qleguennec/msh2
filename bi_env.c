@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 13:34:37 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/16 13:49:09 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/21 16:00:41 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static int
 		{
 			if ((*inp = (*inp)->next) == NULL)
 				return
-					(ERR("env: option requires an argument -- %c", -1, 'u'));
+					(ERR("minishell: env: option requires an argument -- %c"
+					, -1, 'u'));
 			dict_del(env, (*inp)->data);
 		}
 	}
@@ -56,8 +57,10 @@ static int
 	}
 	while (inp && ft_strchr(inp->data, '=') != NULL)
 	{
-		dict_str_import(env, inp->data, "="
-			, DICT_IMPORT_SET | DICT_IMPORT_STR);
+		if (dict_str_import(env, inp->data, "="
+			, DICT_IMPORT_SET | DICT_IMPORT_STR) == 0)
+			return 
+				(ERR("minishell: env: %s: invalid argument", -1, inp->data));
 		inp = inp->next;
 	}
 	dict_print(env, "=", "\n");
