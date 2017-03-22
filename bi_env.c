@@ -6,11 +6,14 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 13:34:37 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/21 16:00:41 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 11:52:18 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#define NOARG_ERROR "minishell: env: option requires an argument: -- u"
+#define INVARG_ERROR "minishell: env: %s: invalid argument"
 
 static int
 	env_process_arg
@@ -31,9 +34,7 @@ static int
 		else
 		{
 			if ((*inp = (*inp)->next) == NULL)
-				return
-					(ERR("minishell: env: option requires an argument -- %c"
-					, -1, 'u'));
+				return (ERR(NOARG_ERROR, -1, 0));
 			dict_del(env, (*inp)->data);
 		}
 	}
@@ -60,7 +61,7 @@ static int
 		if (dict_str_import(env, inp->data, "="
 			, DICT_IMPORT_SET | DICT_IMPORT_STR) == 0)
 			return 
-				(ERR("minishell: env: %s: invalid argument", -1, inp->data));
+				(ERR(INVARG_ERROR, -1, inp->data));
 		inp = inp->next;
 	}
 	dict_print(env, "=", "\n");

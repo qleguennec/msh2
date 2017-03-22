@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/18 13:04:33 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 11:25:57 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,16 @@ int
 	, int *ret);
 int
 	bi_cd
+	(t_dict *env
+	, t_lst *inp
+	, int *ret);
+int
+	bi_setenv
+	(t_dict *env
+	, t_lst *inp
+	, int *ret);
+int
+	bi_unsetenv
 	(t_dict *env
 	, t_lst *inp
 	, int *ret);

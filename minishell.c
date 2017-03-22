@@ -6,11 +6,14 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/21 16:05:17 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 11:57:35 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#define CWD_ERROR "minishell: error: can't determine current directory"
+#define NOT_FOUND_ERROR "minishell: %s: not found"
 
 static int
 	query_bi
@@ -18,10 +21,9 @@ static int
 	, t_lst *inp
 	, int *ret)
 {
-	static char	names[][10] =
-		{"env", "exit", "cd"};
-	static int	(*f[]) (t_dict *, t_lst *, int *) =
-		{&bi_env, &bi_exit, &bi_cd};
+	static char	names[][10] = {"env", "exit", "cd", "setenv", "unsetenv"};
+	static int	(*f[]) (t_dict *, t_lst *, int *) = {&bi_env
+		, &bi_exit, &bi_cd, &bi_setenv, &bi_unsetenv};
 	size_t		i;
 
 	i = 0;
@@ -60,19 +62,17 @@ static int
 		free(path.data);
 		return (ret);
 	}
-	return (ERR("minishell: %s: not found", 0, inp->data));
+	return (ERR(NOT_FOUND_ERROR, 0, inp->data));
 }
 
 static int
 	pre_loop
 	(t_dict *env)
 {
-	char		cwd[1024];
+	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (ERR(
-		"minishell: pwd: can't determine current directory: permission denied"
-		, -1, 0));
+		return (ERR(CWD_ERROR, -1, 0));
 	dict_set(env, "PWD", cwd, 1 + ft_strlen(cwd));
 	return (0);
 }
