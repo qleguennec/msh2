@@ -6,29 +6,13 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 14:46:26 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 15:23:10 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define NOPERM_ERROR "minishell: cd: %s: Permission denied"
-#define ENV_ERROR "minishell: cd: %s not set"
-
-static int
-	cd_get_ent
-	(t_dict *env
-	, t_vect *path
-	, char *key)
-{
-	t_dict_ent	*ent;
-
-	ent = dict_lookup(env, key);
-	if (ent == NULL)
-		return (ERR(ENV_ERROR, 0, key));
-	vect_add(path, ent->val.data, ent->val.used - 1);
-	return (1);
-}
+#define ENOPERM "minishell: cd: %s: Permission denied"
 
 static char
 	*cd_get_path
@@ -39,16 +23,12 @@ static char
 
 	vect_init(&path);
 	if (inp == NULL || *(char *)inp->data == '~')
-	{
-		cd_get_ent(env, &path, "HOME");
-		if (inp != NULL)
-			VFMT(&path, "%s", (char *)inp->data + 1);
-	}
+		env_cpy_val(env, "HOME", &path);
 	else if (*(char *)inp->data == '-')
-		cd_get_ent(env, &path, "OLDPWD");
+		env_cpy_val(env, "OLDPWD", &path);
 	else if (*(char *)inp->data != '/')
 	{
-		cd_get_ent(env, &path, "PWD");
+		env_cpy_val(env, "PWD", &path);
 		VFMT(&path, "/%s", inp->data);
 	}
 	else
@@ -74,7 +54,7 @@ int
 	pwd = dict_lookup(env, "PWD");
 	if (chdir(path) == -1)
 	{
-		ERR(NOPERM_ERROR, -1, path);
+		ERR(ENOPERM, -1, path);
 		free(path);
 		return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 11:25:57 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 15:24:46 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/dir.h>
+# include <sys/stat.h>
 
 // TODO remove debug includes
 # include <stdio.h>
@@ -65,5 +66,14 @@ int
 	(t_dict *env
 	, t_lst *inp
 	, int *ret);
+int
+	env_cpy_val
+	(t_dict *env
+	, char *key
+	, t_vect *v);
+void
+	expand_input
+	(t_dict *env
+	, t_lst *inp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 14:45:52 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 15:28:35 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ static int
 	(t_dict *env
 	, t_lst *inp)
 {
-	char	*s;
-	int		ret;
-	t_vect	path;
+	char		*s;
+	int			ret;
+	struct stat	st;
+	t_vect		path;
 
 	if (inp == NULL)
 		return (0);
-	if (*(char *)inp->data == '/')
+	if ((*(char *)inp->data == '/' || ft_strstr(inp->data, "./") == inp->data)
+		&& stat(inp->data, &st) != -1)
 		return (fork_exec(env, inp->data, inp));
 	else if (query_bi(env, inp, &ret))
 		return (ret);
@@ -93,6 +95,7 @@ static int
 	if (buf->used == 0)
 		return (c == '\n' ? loop(env, buf) : 0);
 	inp = lst_split(buf->data, buf->used, " \t", 2);
+	expand_input(env, inp);
 	query(env, inp);
 	lst_free(inp);
 	return (loop(env, buf));
