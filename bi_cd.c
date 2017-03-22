@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 11:55:17 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/22 14:46:26 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static int
 	ent = dict_lookup(env, key);
 	if (ent == NULL)
 		return (ERR(ENV_ERROR, 0, key));
-	assert(ent->val.used >= 1);
 	vect_add(path, ent->val.data, ent->val.used - 1);
 	return (1);
 }
@@ -43,7 +42,7 @@ static char
 	{
 		cd_get_ent(env, &path, "HOME");
 		if (inp != NULL)
-			VFMT(&path, "%s", inp->data + 1);
+			VFMT(&path, "%s", (char *)inp->data + 1);
 	}
 	else if (*(char *)inp->data == '-')
 		cd_get_ent(env, &path, "OLDPWD");
@@ -54,7 +53,8 @@ static char
 	}
 	else
 		VFMT(&path, "%s", inp->data);
-	vect_mset_end(&path, '\0', 1);
+	if (path.data)
+		vect_mset_end(&path, '\0', 1);
 	return (path.data);
 }
 
