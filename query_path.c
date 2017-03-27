@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 11:35:38 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/17 11:21:31 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/23 10:54:58 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char
 			{
 				ret = ft_strdup(lst->data);
 				lst_free(lst);
+				closedir(dir);
 				return (ret);
 			}
 			closedir(dir);

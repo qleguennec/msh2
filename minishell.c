@@ -6,14 +6,14 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 15:28:35 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/27 15:18:55 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define CWD_ERROR "minishell: error: can't determine current directory"
-#define NOT_FOUND_ERROR "minishell: %s: not found"
+#define ECWD "minishell: error: can't determine current directory"
+#define ENOTFOUND "minishell: %s: not found"
 
 static int
 	query_bi
@@ -64,7 +64,7 @@ static int
 		free(path.data);
 		return (ret);
 	}
-	return (ERR(NOT_FOUND_ERROR, 0, inp->data));
+	return (ERR(ENOTFOUND, 0, inp->data));
 }
 
 static int
@@ -74,7 +74,7 @@ static int
 	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (ERR(CWD_ERROR, -1, 0));
+		return (ERR(ECWD, -1, 0));
 	dict_set(env, "PWD", cwd, 1 + ft_strlen(cwd));
 	return (0);
 }
@@ -95,7 +95,7 @@ static int
 	if (buf->used == 0)
 		return (c == '\n' ? loop(env, buf) : 0);
 	inp = lst_split(buf->data, buf->used, " \t", 2);
-	expand_input(env, inp);
+	expand_input(env, inp->next);
 	query(env, inp);
 	lst_free(inp);
 	return (loop(env, buf));

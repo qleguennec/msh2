@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 15:23:10 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/27 15:15:50 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ int
 	path = cd_get_path(env, inp);
 	if (path == NULL)
 		return (0);
-	pwd = dict_lookup(env, "PWD");
 	if (chdir(path) == -1)
 	{
 		ERR(ENOPERM, -1, path);
 		free(path);
 		return (-1);
 	}
+	pwd = dict_lookup(env, "PWD");
 	if (pwd)
 		dict_set(env, "OLDPWD", pwd->val.data, pwd->val.used);
 	free(path);
