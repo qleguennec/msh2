@@ -6,13 +6,13 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 13:06:25 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 12:40:51 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 14:08:05 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define ENOPERM "minishell: %s: cant' execute: permission denied"
+#define ENOPERM "minishell: %s: can't execute: permission denied"
 
 static int
 	child_exec
