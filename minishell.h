@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 15:24:46 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 11:34:04 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 # include "liblst/liblst.h"
 # include "libfmt/libfmt.h"
 
-# include <unistd.h>
 # include <errno.h>
-# include <sys/types.h>
-# include <sys/wait.h>
+# include <signal.h>
 # include <sys/dir.h>
 # include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 // TODO remove debug includes
 # include <stdio.h>
@@ -75,5 +76,13 @@ void
 	expand_input
 	(t_dict *env
 	, t_lst *inp);
+void
+	sig_int
+	(int sig);
+int
+	bi_echo
+	(t_dict *env
+	, t_lst *inp
+	, int *ret);
 
 #endif

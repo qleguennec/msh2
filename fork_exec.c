@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 13:06:25 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 15:30:22 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/29 11:26:29 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,12 @@ int
 	, char *path
 	, t_lst *args)
 {
-	pid_t	pid;
 	int		ret;
 
-	pid = fork();
-	if (pid == -1)
+	g_pid = fork();
+	if (g_pid == -1)
 		return (ERR("fork error", -1, 0));
-	if (pid == 0)
+	if (g_pid == 0)
 		exit(child_exec(env, path, args));
 	wait(&ret);
 	return (ret);

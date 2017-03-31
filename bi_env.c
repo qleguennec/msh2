@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 13:34:37 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/27 15:10:39 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/29 11:57:41 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ static int
 	{
 		if (dict_str_import(env, inp->data, "="
 			, DICT_IMPORT_SET | DICT_IMPORT_STR) == 0)
-			return 
-				(ERR(EINVARG, -1, inp->data));
+			return (ERR(EINVARG, -1, inp->data));
 		inp = inp->next;
 	}
 	dict_print(env, "=", "\n");

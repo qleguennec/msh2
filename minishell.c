@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/27 15:18:55 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 11:31:27 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ static int
 	, t_lst *inp
 	, int *ret)
 {
-	static char	names[][10] = {"env", "exit", "cd", "setenv", "unsetenv"};
-	static int	(*f[]) (t_dict *, t_lst *, int *) = {&bi_env
-		, &bi_exit, &bi_cd, &bi_setenv, &bi_unsetenv};
+	static char	names[][10] = {"env", "exit", "cd", "setenv", "unsetenv"
+		, "echo"};
+	static int	(*f[]) (t_dict *, t_lst *, int *) = {&bi_env, &bi_exit
+		, &bi_cd, &bi_setenv, &bi_unsetenv, &bi_echo};
 	size_t		i;
 
 	i = 0;
@@ -84,18 +85,21 @@ static int
 	(t_dict *env
 	, t_vect *buf)
 {
-	t_lst	*inp;
 	char	c;
+	ssize_t	ret;
+	t_lst	*inp;
 
 	pre_loop(env);
 	write(1, "$> ", 3);
 	buf->used = 0;
-	while (read(0, &c, 1) == 1 && c != '\n')
+	while ((ret = read(0, &c, 1)) == 1 && c != '\n')
 		vect_mset_end(buf, c, 1);
-	if (buf->used == 0)
-		return (c == '\n' ? loop(env, buf) : 0);
+	if (ret == -1)
+		return (ERR("read error", -1, 0));
+	if (ret == 0)
+		return (ECHO("", 0, 0));
 	inp = lst_split(buf->data, buf->used, " \t", 2);
-	expand_input(env, inp->next);
+	expand_input(env, inp);
 	query(env, inp);
 	lst_free(inp);
 	return (loop(env, buf));
@@ -107,6 +111,7 @@ int
 	, char **argv
 	, char **env_def)
 {
+	int		ret;
 	t_dict	env;
 	t_vect	buf;
 
@@ -117,5 +122,8 @@ int
 		dict_str_import(&env, *env_def++, "="
 			, DICT_IMPORT_ADD | DICT_IMPORT_STR);
 	vect_init(&buf);
-	return (loop(&env, &buf));
+	ret = loop(&env, &buf);
+	dict_free(&env);
+	free(buf.data);
+	return (ret);
 }

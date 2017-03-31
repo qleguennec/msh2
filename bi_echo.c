@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_input.c                                     :+:      :+:    :+:   */
+/*   bi_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/22 15:01:00 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/29 11:21:51 by qle-guen         ###   ########.fr       */
+/*   Created: 2017/03/31 11:31:32 by qle-guen          #+#    #+#             */
+/*   Updated: 2017/03/31 11:41:11 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void
-	expand_input
+int
+	bi_echo
 	(t_dict *env
-	, t_lst *inp)
+	, t_lst *inp
+	, int *ret)
 {
-	t_vect	buf;
+	int		nl;
 
-	if (inp == NULL || inp->next == NULL)
-		return ;
-	inp = inp->next;
-	vect_init(&buf);
-	if (*(char *)inp->data == '~')
+	(void)ret;
+	(void)env;
+	if (!(nl = inp == NULL || ft_strcmp(inp->data, "-n") != 0))
+		inp = inp->next;
+	while (inp)
 	{
-			env_cpy_val(env, "HOME", &buf);
-		if (*(char *)(inp->data + 1) != '\0')
-			VFMT(&buf, "%s", inp->data + 1);
+		write(1, inp->data, ft_strlen(inp->data));
+		if ((inp = inp->next))
+			write(1, " ", 1);
 	}
-	if (buf.data)
-	{
-		VFMT(&buf, "\0", 0);
-		free(inp->data);
-		inp->data = buf.data;
-	}
-	expand_input(env, inp->next);
+	if (nl)
+		write(1, "\n", 1);
+	return (0);
 }
