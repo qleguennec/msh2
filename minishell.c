@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 12:45:43 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 13:38:48 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,26 @@ static int
 }
 
 static int
+	prompt
+	(t_dict *env)
+{
+	char	pwd[1024];
+
+	if (getcwd(pwd, sizeof(pwd)) != NULL)
+	{
+		dict_set(env, "PWD", pwd, 1 + ft_strlen(pwd));
+		write(1, pwd, ft_strlen(pwd));
+		write(1, " $> ", 4);
+	}
+	else
+	{
+		write(1, "$> ", 3);
+		return (ERR(EPWD, -1, 0));
+	}
+	return (0);
+}
+
+static int
 	loop
 	(t_dict *env
 	, t_vect *buf)
@@ -42,12 +62,8 @@ static int
 	char	c;
 	ssize_t	ret;
 	t_lst	*split;
-	char	pwd[1024];
 
-	if (getcwd(pwd, sizeof(pwd)) == NULL)
-		return (ERR(EPWD, -1, 0));
-	dict_set(env, "PWD", pwd, 1 + ft_strlen(pwd));
-	write(1, "$> ", 3);
+	prompt(env);
 	buf->used = 0;
 	while ((ret = read(0, &c, 1)) == 1 && c != '\n')
 		vect_mset_end(buf, c, 1);

@@ -6,13 +6,14 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/27 15:15:50 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 13:49:59 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define ENOPERM "minishell: cd: %s: Permission denied"
+#define ENOPERM "minishell: cd: %s: permission denied"
+#define ENOFILE "minishell: cd: %s: no such file or directory"
 
 static char
 	*cd_get_path
@@ -44,13 +45,20 @@ int
 	, t_lst *inp
 	, int *ret)
 {
-	char		*path;
-	t_dict_ent	*pwd;
+	char			*path;
+	struct stat		st;
+	t_dict_ent		*pwd;
 
 	(void)ret;
 	path = cd_get_path(env, inp);
 	if (path == NULL)
 		return (0);
+	if (stat(path, &st) == -1)
+	{
+		ERR(ENOFILE, -1, path);
+		free(path);
+		return (-1);
+	}
 	if (chdir(path) == -1)
 	{
 		ERR(ENOPERM, -1, path);
