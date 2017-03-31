@@ -6,11 +6,13 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 13:06:25 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/29 11:26:29 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:40:51 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#define ENOPERM "minishell: %s: cant' execute: permission denied"
 
 static int
 	child_exec
@@ -46,12 +48,15 @@ int
 	, char *path
 	, t_lst *args)
 {
-	int		ret;
+	int	ret;
+	int	pid;
 
-	g_pid = fork();
-	if (g_pid == -1)
+	if (access(path, X_OK))
+		return (ERR(ENOPERM, 0, path));
+	pid = fork();
+	if (pid == -1)
 		return (ERR("fork error", -1, 0));
-	if (g_pid == 0)
+	if (pid == 0)
 		exit(child_exec(env, path, args));
 	wait(&ret);
 	return (ret);

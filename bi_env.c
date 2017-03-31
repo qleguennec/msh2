@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 13:34:37 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/29 11:57:41 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:45:06 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ static int
 			return (ERR(EINVARG, -1, inp->data));
 		inp = inp->next;
 	}
-	dict_print(env, "=", "\n");
+	if (inp)
+		inp_query(env, inp);
+	else
+		dict_print(env, "=", "\n");
 	return (0);
 }
 

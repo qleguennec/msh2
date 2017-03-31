@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 11:34:04 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:42:55 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,9 @@ int
 	(t_dict *env
 	, t_lst *inp
 	, int *ret);
+int
+	inp_query
+	(t_dict *env
+	, t_lst *inp);
 
 #endif

@@ -6,78 +6,32 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 11:31:27 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:45:43 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define ECWD "minishell: error: can't determine current directory"
-#define ENOTFOUND "minishell: %s: not found"
+#define EPWD "minishell: error: can't determine current directory"
 
 static int
-	query_bi
+	process_input
 	(t_dict *env
-	, t_lst *inp
-	, int *ret)
+	, t_lst **split)
 {
-	static char	names[][10] = {"env", "exit", "cd", "setenv", "unsetenv"
-		, "echo"};
-	static int	(*f[]) (t_dict *, t_lst *, int *) = {&bi_env, &bi_exit
-		, &bi_cd, &bi_setenv, &bi_unsetenv, &bi_echo};
-	size_t		i;
+	t_lst	*inp;
+	t_lst	*tmp;
+	int		ret;
 
-	i = 0;
-	while (i < sizeof(names) / sizeof(*names))
-	{
-		if (ft_strcmp(names[i], inp->data) == 0)
-		{
-			*ret = f[i](env, inp->next, ret);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-static int
-	query
-	(t_dict *env
-	, t_lst *inp)
-{
-	char		*s;
-	int			ret;
-	struct stat	st;
-	t_vect		path;
-
-	if (inp == NULL)
-		return (0);
-	if ((*(char *)inp->data == '/' || ft_strstr(inp->data, "./") == inp->data)
-		&& stat(inp->data, &st) != -1)
-		return (fork_exec(env, inp->data, inp));
-	else if (query_bi(env, inp, &ret))
-		return (ret);
-	else if ((s = query_path_env(env, inp->data)))
-	{
-		vect_init(&path);
-		VFMT(&path, "%s/%s\0", s, inp->data);
-		ret = fork_exec(env, path.data, inp);
-		free(path.data);
-		return (ret);
-	}
-	return (ERR(ENOTFOUND, 0, inp->data));
-}
-
-static int
-	pre_loop
-	(t_dict *env)
-{
-	char	cwd[1024];
-
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (ERR(ECWD, -1, 0));
-	dict_set(env, "PWD", cwd, 1 + ft_strlen(cwd));
-	return (0);
+	inp = lst_split((*split)->data, ft_strlen((*split)->data), " \t", 2);
+	expand_input(env, inp);
+	ret = inp_query(env, inp);
+	lst_free(inp);
+	tmp = (*split)->next;
+	free((*split)->data);
+	free(*split);
+	*split = tmp;
+	return (ret);
 }
 
 static int
@@ -87,9 +41,12 @@ static int
 {
 	char	c;
 	ssize_t	ret;
-	t_lst	*inp;
+	t_lst	*split;
+	char	pwd[1024];
 
-	pre_loop(env);
+	if (getcwd(pwd, sizeof(pwd)) == NULL)
+		return (ERR(EPWD, -1, 0));
+	dict_set(env, "PWD", pwd, 1 + ft_strlen(pwd));
 	write(1, "$> ", 3);
 	buf->used = 0;
 	while ((ret = read(0, &c, 1)) == 1 && c != '\n')
@@ -98,10 +55,9 @@ static int
 		return (ERR("read error", -1, 0));
 	if (ret == 0)
 		return (ECHO("", 0, 0));
-	inp = lst_split(buf->data, buf->used, " \t", 2);
-	expand_input(env, inp);
-	query(env, inp);
-	lst_free(inp);
+	split = lst_split(buf->data, buf->used, ";", 1);
+	while (split != NULL)
+		process_input(env, &split);
 	return (loop(env, buf));
 }
 

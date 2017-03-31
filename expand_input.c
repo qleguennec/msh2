@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 15:01:00 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/29 11:21:51 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:25:50 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void
 	vect_init(&buf);
 	if (*(char *)inp->data == '~')
 	{
-			env_cpy_val(env, "HOME", &buf);
+		env_cpy_val(env, "HOME", &buf);
 		if (*(char *)(inp->data + 1) != '\0')
 			VFMT(&buf, "%s", inp->data + 1);
 	}
