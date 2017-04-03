@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 13:34:37 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 12:45:06 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/04/03 13:25:42 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,15 @@ static int
 	{
 		s++;
 		if (*s)
-			dict_del(env, s);
-		else
 		{
-			if ((*inp = (*inp)->next) == NULL)
-				return (ERR(ENOARG, -1, 0));
-			dict_del(env, (*inp)->data);
+			dict_del(env, s);
+			return (0);
 		}
+		else if ((*inp = (*inp)->next) == NULL)
+			return (ERR(ENOARG, -1, 0));
+		dict_del(env, (*inp)->data);
 	}
-	if (*s)
-		return (env_process_arg(env, inp, s));
-	else
-		return (0);
+	return (*s ? env_process_arg(env, inp, s) : 0);
 }
 
 static int
@@ -63,10 +60,7 @@ static int
 			return (ERR(EINVARG, -1, inp->data));
 		inp = inp->next;
 	}
-	if (inp)
-		inp_query(env, inp);
-	else
-		dict_print(env, "=", "\n");
+	inp ? inp_query(env, inp) : dict_print(env, "=", "\n");
 	return (0);
 }
 
