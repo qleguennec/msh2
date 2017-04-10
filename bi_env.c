@@ -35,7 +35,7 @@ static int
 			return (0);
 		}
 		else if ((*inp = (*inp)->next) == NULL)
-			return (ERR(ENOARG, -1, 0));
+			return (FMTERR(ENOARG, -1, 0));
 		dict_del(env, (*inp)->data);
 	}
 	return (*s ? env_process_arg(env, inp, s) : 0);
@@ -57,7 +57,7 @@ static int
 	{
 		if (dict_str_import(env, inp->data, "="
 			, DICT_IMPORT_SET | DICT_IMPORT_STR) == 0)
-			return (ERR(EINVARG, -1, inp->data));
+			return (FMTERR(EINVARG, -1, inp->data));
 		inp = inp->next;
 	}
 	inp ? inp_query(env, inp) : dict_print(env, "=", "\n");
@@ -74,7 +74,7 @@ int
 
 	pid = fork();
 	if (pid == -1)
-		return (ERR("fork error\n", -1, 0));
+		return (FMTERR("fork error\n", -1, 0));
 	if (pid == 0)
 		exit(exec_env(env, inp));
 	wait(ret);

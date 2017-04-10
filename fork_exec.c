@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 13:06:25 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/03 12:33:02 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/04/10 11:39:34 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static int
 	int		i;
 
 	MALLOC_N(argv, (1 + lst_len(args)));
-	assert(lst_len(args) >= 1);
 	i = 0;
 	while (args)
 	{
@@ -35,7 +34,7 @@ static int
 	argv[i] = NULL;
 	envp = dict_str_export(env, "=");
 	if (execve(path, argv, envp) == -1)
-		return (ERR("execve error", -1, 0));
+		return (FMTERR("execve error", -1, 0));
 	free(argv);
 	return (0);
 }
@@ -50,10 +49,10 @@ int
 	int	pid;
 
 	if (access(path, X_OK))
-		return (ERR(ENOPERM, 0, path));
+		return (FMTERR(ENOPERM, 0, path));
 	pid = fork();
 	if (pid == -1)
-		return (ERR("fork error", -1, 0));
+		return (FMTERR("fork error", -1, 0));
 	if (pid == 0)
 		exit(child_exec(env, path, args));
 	wait(&ret);

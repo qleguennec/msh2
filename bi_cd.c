@@ -55,13 +55,13 @@ int
 		return (0);
 	if (stat(path, &st) == -1)
 	{
-		ERR(ENOFILE, -1, path);
+		FMTERR(ENOFILE, -1, path);
 		free(path);
 		return (-1);
 	}
 	if (chdir(path) == -1)
 	{
-		ERR(ENOPERM, -1, path);
+		FMTERR(ENOPERM, -1, path);
 		free(path);
 		return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/03 12:17:18 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/04/10 11:30:01 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
-// TODO remove
-# include <assert.h>
-# include <stdio.h>
 
 char	*query_path(char *path, char *file);
 char	*query_path_env(t_dict *env, char *file);

@@ -24,7 +24,7 @@ int
 		return (0);
 	if (dict_str_import(env, inp->data, "="
 		, DICT_IMPORT_SET | DICT_IMPORT_STR) == 0)
-		return (ERR(ENOARG, -1, inp->data));
+		return (FMTERR(ENOARG, -1, inp->data));
 	*ret = 1;
 	return (bi_setenv(env, inp->next, ret));
 }

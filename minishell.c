@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/03 13:18:34 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/04/10 14:03:10 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int
 	else
 	{
 		write(1, "$> ", 3);
-		return (ERR(EPWD, -1, 0));
+		return (FMTERR(EPWD, -1, 0));
 	}
 	return (0);
 }
@@ -68,9 +68,12 @@ static int
 	while ((ret = read(0, &c, 1)) == 1 && c != '\n')
 		vect_mset_end(buf, c, 1);
 	if (ret == -1)
-		return (ERR("read error", -1, 0));
+		return (FMTERR("read error", -1, 0));
 	if (ret == 0)
-		return (ECHO("", 0, 0));
+	{
+		write(1, "\n", 1);
+		return (buf->used == 0 ? 0 : loop(env, buf));
+	}
 	split = lst_split(buf->data, buf->used, ";", 1);
 	while (split != NULL)
 		process_input(env, &split);
@@ -95,7 +98,5 @@ int
 			, DICT_IMPORT_ADD | DICT_IMPORT_STR);
 	vect_init(&buf);
 	ret = loop(&env, &buf);
-	dict_free(&env);
-	free(buf.data);
 	return (ret);
 }

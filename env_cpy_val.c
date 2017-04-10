@@ -24,7 +24,7 @@ int
 
 	ent = dict_lookup(env, key);
 	if (ent == NULL)
-		return (ERR(ENOENV, 0, key));
+		return (FMTERR(ENOENV, 0, key));
 	vect_add(v, ent->val.data, ent->val.used - 1);
 	return (1);
 }
