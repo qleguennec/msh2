@@ -6,14 +6,11 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/31 12:41:03 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/10 16:56:33 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:57:49 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// TODO remove
-#include <stdio.h>
 
 #define ENOTFOUND "minishell: %s: not found"
 
@@ -54,7 +51,8 @@ int
 
 	if (inp == NULL)
 		return (0);
-	if (stat(inp->data, &st) >= 0)
+	if ((*(char *)inp->data == '/' || ft_strstr(inp->data, "./") == inp->data)
+		&& stat(inp->data, &st) != -1)
 		return (fork_exec(env, inp->data, inp));
 	else if (query_bi(env, inp, &ret))
 		return (ret);

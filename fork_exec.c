@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 13:06:25 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/10 11:39:34 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 14:08:05 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int
 	char	**envp;
 	int		i;
 
-	MALLOC_N(argv, (1 + lst_len(args)));
+	MALLOC_N(argv, lst_len(args) + 1);
 	i = 0;
 	while (args)
 	{
@@ -35,6 +35,9 @@ static int
 	envp = dict_str_export(env, "=");
 	if (execve(path, argv, envp) == -1)
 		return (FMTERR("execve error", -1, 0));
+	while (*envp)
+		free(*envp++);
+	free(envp);
 	free(argv);
 	return (0);
 }

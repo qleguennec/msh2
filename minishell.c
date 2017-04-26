@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/07 12:33:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/10 14:03:10 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 13:38:48 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,7 @@ static int
 	if (ret == -1)
 		return (FMTERR("read error", -1, 0));
 	if (ret == 0)
-	{
-		write(1, "\n", 1);
-		return (buf->used == 0 ? 0 : loop(env, buf));
-	}
+		return (FMTECHO("", 0, 0));
 	split = lst_split(buf->data, buf->used, ";", 1);
 	while (split != NULL)
 		process_input(env, &split);
@@ -98,5 +95,7 @@ int
 			, DICT_IMPORT_ADD | DICT_IMPORT_STR);
 	vect_init(&buf);
 	ret = loop(&env, &buf);
+	dict_free(&env);
+	free(buf.data);
 	return (ret);
 }

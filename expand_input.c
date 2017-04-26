@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 15:01:00 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/10 13:56:50 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/03/31 12:25:50 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ void
 {
 	t_vect	buf;
 
-	if (inp == NULL)
+	if (inp == NULL || inp->next == NULL)
 		return ;
+	inp = inp->next;
 	vect_init(&buf);
 	if (*(char *)inp->data == '~')
 	{
