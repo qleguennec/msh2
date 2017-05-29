@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 13:34:37 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 12:45:06 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:44:05 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int
 		else
 		{
 			if ((*inp = (*inp)->next) == NULL)
-				return (FMTERR(ENOARG, -1, 0));
+				return (err(-1, ENOARG));
 			dict_del(env, (*inp)->data);
 		}
 	}
@@ -60,7 +60,7 @@ static int
 	{
 		if (dict_str_import(env, inp->data, "="
 			, DICT_IMPORT_SET | DICT_IMPORT_STR) == 0)
-			return (FMTERR(EINVARG, -1, inp->data));
+			return (err(-1, EINVARG, inp->data));
 		inp = inp->next;
 	}
 	if (inp)
@@ -80,7 +80,7 @@ int
 
 	pid = fork();
 	if (pid == -1)
-		return (FMTERR("fork error\n", -1, 0));
+		return (err(-1, "fork error\n"));
 	if (pid == 0)
 		exit(exec_env(env, inp));
 	wait(ret);

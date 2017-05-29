@@ -1,5 +1,5 @@
 NAME = minishell
-SRC = $(filter %.c, $(shell ls))
+SRC = bi_cd.c bi_echo.c bi_env.c bi_exit.c bi_setenv.c bi_unsetenv.c env_cpy_val.c expand_input.c fork_exec.c inp_query.c malloc_err.c minishell.c query_path.c
 OBJ = $(SRC:.c=.o)
 LIB = libft/libft.a libvect/libvect.a libdict/libdict.a libfmt/libfmt.a liblst/liblst.a
 

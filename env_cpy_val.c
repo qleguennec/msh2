@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 15:03:17 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/22 15:25:18 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:44:49 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int
 
 	ent = dict_lookup(env, key);
 	if (ent == NULL)
-		return (FMTERR(ENOENV, 0, key));
+		return (err(0, ENOENV, key));
 	vect_add(v, ent->val.data, ent->val.used - 1);
 	return (1);
 }

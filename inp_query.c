@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/31 12:41:03 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 12:57:49 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:51:31 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,12 @@ int
 	else if ((s = query_path_env(env, inp->data)))
 	{
 		vect_init(&path);
-		VFMT(&path, "%s/%s\0", s, inp->data);
+		path.malloc_err_f = &malloc_err;
+		vfmt(0, &path, "%s/%s\0", s, inp->data);
 		free(s);
 		ret = fork_exec(env, path.data, inp);
 		free(path.data);
 		return (ret);
 	}
-	return (FMTERR(ENOTFOUND, 0, inp->data));
+	return (err(0, ENOTFOUND, inp->data));
 }

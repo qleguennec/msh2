@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/10 13:02:50 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/04/10 11:30:01 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:48:00 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ int		fork_exec(t_dict *env, char *path, t_lst *args);
 int		inp_query(t_dict *env, t_lst *inp);
 void	expand_input(t_dict *env, t_lst *inp);
 void	sig_int(int sig);
+void	malloc_err(void *arg);
 
 #endif

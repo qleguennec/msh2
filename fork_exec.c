@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/16 13:06:25 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 14:08:05 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:52:35 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ static int
 	char	**envp;
 	int		i;
 
-	MALLOC_N(argv, lst_len(args) + 1);
+	/* MALLOC_N(argv, lst_len(args) + 1); */
+	argv = malloc(sizeof(*argv) * (lst_len(args) + 1));
+	if (argv == NULL)
+		malloc_err(NULL);
 	i = 0;
 	while (args)
 	{
@@ -34,7 +37,7 @@ static int
 	argv[i] = NULL;
 	envp = dict_str_export(env, "=");
 	if (execve(path, argv, envp) == -1)
-		return (FMTERR("execve error", -1, 0));
+		return (err(0, "execve error", -1, 0));
 	while (*envp)
 		free(*envp++);
 	free(envp);
@@ -52,10 +55,10 @@ int
 	int	pid;
 
 	if (access(path, X_OK))
-		return (FMTERR(ENOPERM, 0, path));
+		return (err(0, ENOPERM, path));
 	pid = fork();
 	if (pid == -1)
-		return (FMTERR("fork error", -1, 0));
+		return (err(0, "fork error"));
 	if (pid == 0)
 		exit(child_exec(env, path, args));
 	wait(&ret);

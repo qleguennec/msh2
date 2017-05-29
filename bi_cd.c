@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 11:28:44 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 13:49:59 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:42:45 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ static char
 	else if (*(char *)inp->data != '/')
 	{
 		env_cpy_val(env, "PWD", &path);
-		VFMT(&path, "/%s", inp->data);
+		vfmt(0, &path, "/%s", inp->data);
 	}
 	else
-		VFMT(&path, "%s", inp->data);
+		vfmt(0, &path, "%s", inp->data);
 	if (path.data)
 		vect_mset_end(&path, '\0', 1);
 	return (path.data);
@@ -55,13 +55,13 @@ int
 		return (0);
 	if (stat(path, &st) == -1)
 	{
-		FMTERR(ENOFILE, -1, path);
+		err(-1, ENOFILE, path);
 		free(path);
 		return (-1);
 	}
 	if (chdir(path) == -1)
 	{
-		FMTERR(ENOPERM, -1, path);
+		err(-1, ENOPERM, path);
 		free(path);
 		return (-1);
 	}

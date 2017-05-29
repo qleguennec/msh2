@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 15:01:00 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/03/31 12:25:50 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/05/29 04:51:43 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@ void
 		return ;
 	inp = inp->next;
 	vect_init(&buf);
+	buf.malloc_err_f = &malloc_err;
 	if (*(char *)inp->data == '~')
 	{
 		env_cpy_val(env, "HOME", &buf);
 		if (*(char *)(inp->data + 1) != '\0')
-			VFMT(&buf, "%s", inp->data + 1);
+			vfmt(0, &buf, "%s", inp->data + 1);
 	}
 	if (buf.data)
 	{
-		VFMT(&buf, "\0", 0);
+		vfmt(0, &buf, "\0", 0);
 		free(inp->data);
 		inp->data = buf.data;
 	}
